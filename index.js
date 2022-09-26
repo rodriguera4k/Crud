@@ -1,6 +1,6 @@
 var dados = []
 
-function ApagaRegistro(ID) {
+function ApagaRegistro(id) {
   let _confirm = confirm("Deseja Realmente excluir esse registro?")
   if (_confirm) {
     for (let i = 0; i < dados.length; i++) {
@@ -11,7 +11,7 @@ function ApagaRegistro(ID) {
     PopulaTabela()
   }
 }
-function EditaRegistro(ID) {
+function EditaRegistro(id) {
   $("#modalReg").modal("show")
 
   dados.forEach(function (item) {
@@ -26,19 +26,19 @@ function EditaRegistro(ID) {
 function PopulaTabela() {
   if (Array.isArray(dados)) {
 
-    localStorage.setItem("__dados__", JSON.stringify(dados))
+    const dadoLocal = localStorage.getItem("__dados__", JSON.stringify(dados))
+    $("#bodyTable").html("")
 
-    $("#tbDados tbody").html("")
-
-    dados.forEach(function (item) {
+    Array.from(dadoLocal).forEach(function (item) {
+      console.log(item.Nome)
       //TEMPLATE STRING  
-      $("#tbDados tbody").append(`z<tr> 
+      $("#bodyTable").append(`z<tr> 
           <td>${item.ID}</td>
           <td>${item.Nome}</td>
           <td>${item.DtNascimento}</td>
           <td>${item.Email}</td>
-          <td><button type="button" class="btn btn-primary"onclick="javascript:ditaRegistro(${item.ID})>< i class="fa fa-edit" /></button></td>
-          <td><button type="button" class="btn btn-danger" onclick="javascript:ApagaRegistro(${item.ID});">< i class="fa fa-trash" /></button></td>
+          <td><button type="button" class="btn btn-primary"onclick="javascript:ditaRegistro(${item.ID})>< i class="fa fa-edit"/>Editar</button></td>
+          <td><button type="button" class="btn btn-danger" onclick="javascript:ApagaRegistro(${item.ID});"><i i class="fa fa-trash"></i></i></button></td>
       </tr>`)
 
     })
@@ -69,11 +69,10 @@ $(function () {
     registro.DtNascimento = DtNascimento
     registro.Email = Email
 
-
-
-    registro.ID = dados.length + 1
-
-    dados.push(registro)
+    var arr = dados || []
+    registro.ID = arr.length + 1
+    dados.unshift(registro)
+    // console.log(dados)
 
     alert("Registro Salvo com Sucesso")
     $("#modalReg").modal("hide")
